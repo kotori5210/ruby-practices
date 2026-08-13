@@ -1,12 +1,15 @@
-(1..100).each do |number|
+def fizz_buzz(number)
   if number % 15 == 0
-    puts 'FizzBuzz'
+    'FizzBuzz'
   elsif number % 3 == 0
-    puts 'Fizz'
+    'Fizz'
   elsif number % 5 == 0
-    puts 'Buzz'
+    'Buzz'
   else
-    puts number
+    number
   end
 end
 
+(1..100).each do |number|
+  puts fizz_buzz(number)
+end
