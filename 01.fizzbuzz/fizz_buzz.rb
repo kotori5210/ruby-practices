@@ -10,6 +10,6 @@ def fizz_buzz(number)
   end
 end
 
-(1..100).each do |number|
+(1..20).each do |number|
   puts fizz_buzz(number)
 end
