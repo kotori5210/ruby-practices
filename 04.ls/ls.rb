@@ -16,4 +16,3 @@ rows.times do |r|
   end
   puts
 end
-
