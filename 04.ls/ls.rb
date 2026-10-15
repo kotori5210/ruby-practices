@@ -2,7 +2,12 @@
 
 # メソッド1: ファイル名の一覧を取得する
 def fetch_files
-  Dir.glob('*').sort
+  files = Dir.glob('*').sort
+  if ARGV.include?('-r')
+    files.reverse
+  else
+    files
+  end
 end
 
 # メソッド2: 複数列のレイアウトを構築して画面に出力する
@@ -28,4 +33,3 @@ end
 # メイン処理の実行
 files_list = fetch_files
 display_files(files_list)
-
