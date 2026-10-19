@@ -29,6 +29,6 @@ def display_files(files)
   end
 end
 
-# メイン処理の実行
+# メメイン処理の実行
 files_list = fetch_files
 display_files(files_list)
