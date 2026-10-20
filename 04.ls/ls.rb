@@ -2,8 +2,9 @@
 
 # メソッド1: ファイル名の一覧を取得する
 def fetch_files
-  flags = ARGV.include?('-a') ? File::FNM_DOTMATCH : 0
-  Dir.glob('*', flags).sort
+  files = Dir.glob('*').sort
+  files.reverse! if ARGV.include?('-r')
+  files
 end
 
 # メソッド2: 複数列のレイアウトを構築して画面に出力する
