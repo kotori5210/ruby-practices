@@ -14,17 +14,19 @@ def convert_mode_to_permissions(stat)
   "#{type}#{permissions}"
 end
 
+# yuuuさんの指摘通り、行数を限界まで減らしてスッキリさせたメソッド
 def display_long_files(files)
   stats = files.map { |file| [file, File.stat(file)] }.to_h
 
+  display_total_blocks(stats)
+  max_lengths = calculate_max_lengths(stats)
+  files.each { |file| puts build_long_format_row(file, stats[file], max_lengths) }
+end
+
+# ブロック数の計算と表示を別メソッドに切り出し
+def display_total_blocks(stats)
   total_blocks = stats.values.map(&:blocks).sum / 2
   puts "total #{total_blocks}"
-
-  max_lengths = calculate_max_lengths(stats)
-
-  files.each do |file|
-    puts build_long_format_row(file, stats[file], max_lengths)
-  end
 end
 
 def calculate_max_lengths(stats)
