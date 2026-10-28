@@ -4,11 +4,8 @@ require 'etc'
 require 'optparse'
 
 def fetch_files(options)
-  # -a オプションがあればドットファイルを含め、なければ除外する
   flags = options[:a] ? File::FNM_DOTMATCH : 0
   files = Dir.glob('*', flags).sort
-
-  # -r オプションがあれば配列を逆順（降順）にする
   files.reverse! if options[:r]
   files
 end
