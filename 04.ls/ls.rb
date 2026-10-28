@@ -1,9 +1,13 @@
 # frozen_string_literal: true
 
 require 'etc'
+require 'optparse'
 
-def fetch_files
-  Dir.glob('*').sort
+def fetch_files(options)
+  flags = options[:a] ? File::FNM_DOTMATCH : 0
+  files = Dir.glob('*', flags).sort
+  files.reverse! if options[:r]
+  files
 end
 
 def convert_mode_to_permissions(stat)
@@ -15,6 +19,8 @@ def convert_mode_to_permissions(stat)
 end
 
 def display_long_files(files)
+  return if files.empty?
+
   stats = files.map { |file| [file, File.stat(file)] }.to_h
 
   display_total_blocks(stats)
@@ -67,9 +73,16 @@ def display_files(files)
   end
 end
 
-files_list = fetch_files
+options = {}
+OptionParser.new do |opts|
+  opts.on('-a') { |v| options[:a] = v }
+  opts.on('-r') { |v| options[:r] = v }
+  opts.on('-l') { |v| options[:l] = v }
+end.parse!
 
-if ARGV.include?('-l')
+files_list = fetch_files(options)
+
+if options[:l]
   display_long_files(files_list)
 else
   display_files(files_list)
