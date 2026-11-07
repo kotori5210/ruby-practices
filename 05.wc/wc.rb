@@ -2,20 +2,15 @@
 
 require 'optparse'
 
-def count_elements(text)
-  lines_count = text.count("\n")
-  words_count = text.split(/[ \t\n]+/).reject(&:empty?).size
-  bytes_count = text.bytesize
-  [lines_count, words_count, bytes_count]
-end
+def main
+  options = parse_options
+  files = ARGV
 
-def format_output(lines, words, bytes, options, label = '')
-  result = []
-  result << lines.to_s.rjust(8) if options[:lines]
-  result << words.to_s.rjust(8) if options[:words]
-  result << bytes.to_s.rjust(8) if options[:bytes]
-  result << " #{label}" unless label.empty?
-  result.join
+  if files.empty?
+    process_standard_input(options)
+  else
+    process_files(files, options)
+  end
 end
 
 def parse_options
@@ -63,15 +58,24 @@ def process_files(files, options)
   puts format_output(total_lines, total_words, total_bytes, options, 'total') if files.size > 1
 end
 
-def main
-  options = parse_options
-  files = ARGV
+def count_elements(text)
+  lines_count = text.count("\n")
+  words_count = text.split(/[ \t\n]+/).reject(&:empty?).size
+  bytes_count = text.bytesize
+  [lines_count, words_count, bytes_count]
+end
 
-  if files.empty?
-    process_standard_input(options)
-  else
-    process_files(files, options)
-  end
+def format_output(lines, words, bytes, options, label = '')
+  result = []
+  result << format_column(lines) if options[:lines]
+  result << format_column(words) if options[:words]
+  result << format_column(bytes) if options[:bytes]
+  result << " #{label}" unless label.empty?
+  result.join
+end
+
+def format_column(value)
+  value.to_s.rjust(8)
 end
 
 main
