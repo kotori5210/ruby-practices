@@ -7,9 +7,9 @@ def main
   files = ARGV
 
   if files.empty?
-    process_standard_input(options)
+    count_standard_input(options)
   else
-    process_files(files, options)
+    count_files(files, options)
   end
 end
 
@@ -29,13 +29,12 @@ def parse_options
   options
 end
 
-def process_standard_input(options)
+def count_standard_input(options)
   input_text = $stdin.read
-  lines, words, bytes = count_elements(input_text)
-  puts format_output(lines, words, bytes, options)
+  print_counted_data(input_text, options)
 end
 
-def process_files(files, options)
+def count_files(files, options)
   total_lines = 0
   total_words = 0
   total_bytes = 0
@@ -47,8 +46,7 @@ def process_files(files, options)
     end
 
     content = File.read(file)
-    lines, words, bytes = count_elements(content)
-    puts format_output(lines, words, bytes, options, file)
+    lines, words, bytes = print_counted_data(content, options, file)
 
     total_lines += lines
     total_words += words
@@ -56,6 +54,12 @@ def process_files(files, options)
   end
 
   puts format_output(total_lines, total_words, total_bytes, options, 'total') if files.size > 1
+end
+
+def print_counted_data(text, options, label = '')
+  lines, words, bytes = count_elements(text)
+  puts format_output(lines, words, bytes, options, label)
+  [lines, words, bytes]
 end
 
 def count_elements(text)
